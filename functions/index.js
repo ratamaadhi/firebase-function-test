@@ -5,23 +5,34 @@ const {
     getAllTodos,
     postOneTodo,
     deleteTodo,
-    editTodo
+    editTodo,
+    getOneTodo
 } = require('./APIs/todos')
 
 const {
     loginUser,
-    signUpUser
+    signUpUser,
+    uploadProfilePhoto,
+    getUserDetail,
+    updateUserDetails
 } = require('./APIs/users')
 
+const auth = require('./util/auth');
+
 //Todos
-app.get('/', getAllTodos);
-app.get('/todos', getAllTodos);
-app.post('/todo', postOneTodo);
-app.delete('/todo/:todoId', deleteTodo);
-app.put('/todo/:todoId', editTodo);
+app.get('/', auth, getAllTodos);
+app.get('/todos', auth, getAllTodos);
+app.get('/todo/:todoId', auth, getOneTodo);
+app.post('/todo', auth, postOneTodo);
+app.delete('/todo/:todoId', auth, deleteTodo);
+app.put('/todo/:todoId', auth, editTodo);
 
 //Users
 app.post('/login', loginUser);
 app.post('/signup', signUpUser);
+
+app.post('/user/image', auth, uploadProfilePhoto);
+app.get('/user', auth, getUserDetail);
+app.post('/user', auth, updateUserDetails);
 
 exports.api = functions.https.onRequest(app);
